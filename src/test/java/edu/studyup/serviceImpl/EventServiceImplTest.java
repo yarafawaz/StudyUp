@@ -78,5 +78,23 @@ class EventServiceImplTest {
 			eventServiceImpl.updateEvent(event);
 		  });
 	}
+	
+	@Test
+	//@Disabled("Not ready")
+	void testUpdateMethod_event_null_badcases() {
+		Event event = null; 
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.updateEvent(event);
+		}); 
+	}
+	
+	@Test
+	void testbadCase() {
+		assertEquals(1,2); 
+		// not true, 1, 2
+		// bad test case, don't always assume your code is buggy
+	}
+	
+	
 
 }
