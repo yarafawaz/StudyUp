@@ -148,7 +148,7 @@ class EventServiceImplTest {
 	// TODO - one more for getPastEvents
 	// Bug 3
 	@Test  
-	void testGetPastEvents_FutureDate_GoodCase() {
+	void testGetPastEvents_FutureDate_BadCase() {
 		Event event = new Event(); 
 		event.setEventID(2);
 		Calendar cal = Calendar.getInstance(); 
@@ -220,7 +220,7 @@ class EventServiceImplTest {
 	
 	@Test 
 	void testDeleteEvent_GoodCase(){
-		int eventID = 1; 
+		int eventID = 2; 
 		assertNull(eventServiceImpl.deleteEvent(eventID));
 	}
 
