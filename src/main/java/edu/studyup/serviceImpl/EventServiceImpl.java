@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.io.File;
 
 import edu.studyup.entity.Event;
 import edu.studyup.entity.Student;
@@ -22,6 +24,7 @@ public class EventServiceImpl implements EventService {
 
 		if(name.length() >= 20) {
 			throw new StudyUpException("Length too long. Maximun is 20");
+
 		}
 		event.setName(name);
 		DataStorage.eventData.put(eventID, event);
@@ -34,8 +37,8 @@ public class EventServiceImpl implements EventService {
 		Map<Integer, Event> eventData = DataStorage.eventData;
 		List<Event> activeEvents = new ArrayList<>();
 		
-		for (Integer key : eventData.keySet()) {
-			Event ithEvent= eventData.get(key);
+		for (Entry<Integer, Event> event : eventData.entrySet()) {
+			Event ithEvent= event.getValue();
 			activeEvents.add(ithEvent);
 		}
 		return activeEvents;
@@ -46,8 +49,8 @@ public class EventServiceImpl implements EventService {
 		Map<Integer, Event> eventData = DataStorage.eventData;
 		List<Event> pastEvents = new ArrayList<>();
 		
-		for (Integer key : eventData.keySet()) {
-			Event ithEvent= eventData.get(key);
+		for (Entry<Integer, Event> event : eventData.entrySet()) {
+			Event ithEvent= event.getValue();
 			// Checks if an event date is before today, if yes, then add to the past event list.
 			if(ithEvent.getDate().before(new Date())) {
 				pastEvents.add(ithEvent);
