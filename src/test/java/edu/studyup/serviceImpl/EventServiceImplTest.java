@@ -86,7 +86,7 @@ class EventServiceImplTest {
 		Assertions.assertDoesNotThrow(() -> {
 			eventServiceImpl.updateEventName(eventID, newName);
 		});
-	}
+	} 
 
 	// should throw exception for name longer than 20 chars
 	@Test
@@ -103,7 +103,7 @@ class EventServiceImplTest {
 		event.setEventID(2);
 
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2020);
+		cal.set(Calendar.YEAR, 2000);
 		cal.set(Calendar.MONTH, Calendar.JANUARY);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		Date futureDate = cal.getTime();
@@ -146,5 +146,82 @@ class EventServiceImplTest {
 	}
 
 	// TODO - one more for getPastEvents
+	// Bug 3
+	@Test  
+	void testGetPastEvents_FutureDate_BadCase() {
+		Event event = new Event(); 
+		event.setEventID(2);
+		Calendar cal = Calendar.getInstance(); 
+		cal.set(Calendar.YEAR, 2030); 
+		cal.set(Calendar.MONTH, Calendar.JUNE);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		Date futureDate = cal.getTime();
+		event.setDate(futureDate);
+		
+		DataStorage.eventData.put(event.getEventID(), event);
+		assert(eventServiceImpl.getPastEvents().contains(event));
+	}
+	
+	@Test 
+	void testAddStudentToEvent_GoodCase() {
+		Student student2 = new Student();
+		int eventID2 = 2; 
+		Event event2 = new Event();
+		event2.setEventID(2);
+		List<Student> eventStudents = new ArrayList<>();
+		eventStudents.add(student2);
+		event2.setStudents(eventStudents);
+		DataStorage.eventData.put(event2.getEventID(), event2);
+		
+		Assertions.assertDoesNotThrow(() -> {
+			eventServiceImpl.addStudentToEvent(student2, eventID2);
+		}); 
+	}
+	
+	@Test  
+	// Bug - addStudentToEvent doesn't check for the limit of students and will continue to add 
+	void testAddStudentToEvent_BadCase() throws StudyUpException {
+		Student student2 = new Student();
+		int eventID2 = 2; 
+		Event event2 = new Event();
+		event2.setEventID(2);
+		List<Student> eventStudents = new ArrayList<>();
+		eventStudents.add(student2);
+		event2.setStudents(eventStudents);
+		DataStorage.eventData.put(event2.getEventID(), event2);
+		eventServiceImpl.addStudentToEvent(student2, eventID2);
+		
+		Student student3 = new Student();
+		int eventID3 = 3; 
+		Event event3 = new Event();
+		event2.setEventID(2);
+		List<Student> eventStudent = new ArrayList<>();
+		eventStudent.add(student3);
+		event2.setStudents(eventStudent);
+		DataStorage.eventData.put(event3.getEventID(), event3);
+		
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.addStudentToEvent(student3, eventID3); 
+		});	
+	}
+	
+	@Test 
+	void testAddToEvent_GoodCase_StudentIsNull() throws StudyUpException{
+		Student student2 = new Student();
+		int eventID2 = 2; 
+		Event event2 = new Event();
+		event2.setEventID(2);
+		DataStorage.eventData.put(event2.getEventID(), event2);
+
+		Assertions.assertDoesNotThrow(() -> {
+			eventServiceImpl.addStudentToEvent(student2, eventID2);
+		});
+	}
+	
+	@Test 
+	void testDeleteEvent_GoodCase(){
+		int eventID = 2; 
+		assertNull(eventServiceImpl.deleteEvent(eventID));
+	}
 
 }
