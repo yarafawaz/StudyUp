@@ -223,5 +223,4 @@ class EventServiceImplTest {
 		int eventID = 2; 
 		assertNull(eventServiceImpl.deleteEvent(eventID));
 	}
-
 }
